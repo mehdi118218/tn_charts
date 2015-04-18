@@ -1,23 +1,236 @@
 
 <!DOCTYPE html>
-<html>
+<html >
 <head>
-   <title>Google Chart Example</title>
+<link rel="icon" href="img/favicon.ico" />
+   <title>Tunisia Election Data</title>
+   <meta name="description" content="Tunisia Election Data Browser">
+   <meta name="application-name" content="Check out @Mourakiboun's open data charts of Tunisia's elections!">
+   <meta name="title" content="Check out @Mourakiboun's open data charts of Tunisia's elections!">
+
    <script src="https://www.google.com/jsapi"></script>
    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
    <script src="jquery.csv-0.71.min.js"></script>
-   <script src="mehdi_charts.js"></script>
+   <script src="charts.js"></script>
+   
+
       
+<!--google web font-->
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,600' rel='stylesheet' type='text/css'>
+
+  <!--basic style sheets and scripts -->
+  
+  <link rel="stylesheet" media="screen" href="css/bootstrap.min.css"/>
+  <!--link rel="stylesheet" media="screen" href="css/bootstrap-responsive.css"/-->
+  
+  <link href='//api.tiles.mapbox.com/mapbox.js/v1.4.2/mapbox.css' rel='stylesheet' />
+
+  <link rel="stylesheet" media="screen" href="css/charts_style.css"/>
+  
+
+   
 
 
+  
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+
+  <script>
+  $( document ).tooltip({
+          content: function () {
+              return $(this).prop('title');
+          }
+      });
+
+  $(document).ready(function () {
+  
+  $('#toggle-view li').click(function () {
+
+    var text = $(this).children('div.panel');
+
+    if (text.is(':hidden')) {
+      text.slideDown('200');
+      $(this).children('span').html('[x] close');   
+    } else {
+      text.slideUp('200');
+      $(this).children('span').html('read more...');   
+    }
+    
+  });
+
+});
+</script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 
 
 </head>
-<body>
-   <select id="un"></select>
-   <select id="deux"></select>
-   <select id="trois"></select>
-   <div id="chart"></div>
-   
-  </body>
+<body style="background-color:#1c1c1c">
+
+
+
+<!-- explanation -->
+<div>
+<ul id="toggle-view">
+  <li>
+    <h1>Charts' overview</h1>
+    <h5>The charts section allows the viewer to compare and contrast Tunisia's latest election-related data as well as socio-economic data. Three datasets have been provided in order for related data from different sources can be displayed simultaneously for the purpose of comparison and determining possible correlations.</br></br>This charts section does not attempt to analyze these datasets or suggest correlations. It is a platform for the public to interact with various datasets and draw one's own conclusion about the relationships that do or do not exist. </br></br></br>
+    </h5>
+    <span style="color:red">read more...</span> 
+    
+
+    <div class="panel">
+   <ul>
+   <li>
+    <h2>Datasets with different boundaries</h2>
+    <div>
+      <h5>Socio-economic data is gathered at the governorate level, unlike election results that are reported at the circonscription level. While election results can be displayed here at either level, socio-economic data cannot be viewed at the circonscription level; please keep this in mind when comparing with election results at the circonscription level.</br></br></h5>
+    </div>
+  </li>
+  <li>
+    <h2>Population size</h2>
+    <div>
+      <h5>Election results are drawn from a population of citizens 18 years and older (those who are eligible to vote). For the socio-economic data, the underlying population size varies according to the type of data. For example, the "youth ratio" dataset refers to the percentage per governorate of young people between 15-34 in 2014. Unemployment and illiteracy rates refer to Tunisians 15 years and older. Note: all communications data (mobile, internet and computer coverage) is measured at the household level, with a household defined as, on average, 4.21 people.</br></br></h5>
+    </div>
+  </li>
+  <li>
+    <h2>Communications data</h2>
+    <div>
+      <h5>Internet access refers to households with at least one member using the Internet either at home or outside.</br></br></h5>
+    </div>
+  </li>
+  <li>
+    <h2>Voters abroad</h2>
+    <div>
+      <h5>There are 6 circonscriptions outside of Tunisia for Tunisians voting abroad; these results are not incorporated into the data presented in this section.</br></br></h5>
+    </div>
+  </li>
+  <li>
+    <h2>Data sources</h2>
+    <div>
+      <h5>The charts section displays two types of data: electoral data and socio-economic data. These datasets are sourced from the following websites and documents:</br></br>Electoral data: originally obtained from multiple reports published by the <a style="color:#FE2E2E" href='http://www.isie.tn' target='_blank'>Independent High Commission for the Elections (ISIE)</a> and converted to CSV by <a style="color:#FE2E2E" href='http://www.mourakiboun.org' target='_blank'>Mourakiboun</a></br></br>Socio-economic data: the datasets used in the charts section are obtained from the National Survey and Housing 2014. It was the last nationwide survey that <a style="color:#FE2E2E" href='http://www.ins.nat.tn/indexen.php' target='_blank'>The National Institute of Statistics (INS)</a> completed. The sample included nearly 162 500 households representative of the entire households distributed over 6500 counties in different governorates, cities, villages and rural areas. </br></br>
+    </div>
+  </li>
+  
+</ul>
+
+
+
+
+    </div>
+
+  </li> 
+</ul>
+</div>
+<!-- end explanation -->
+
+
+
+<!-- core -->
+<div  style="height:'100%' ; background-color:#FFF ; padding:20px">
+
+
+	<select multiple size="5" id="first_select" title="<b>ELECTIONS RESULTS</b></br>This dataset includes the results of the three elections held in Tunisia in 2014 (parliamentary, presidential and presidential run-off). One may choose one result or more to add to the graph and compare with one or more data from the other datasets. To view more than one data from this dataset, CTRL-click (or command-click) each data.">
+	<optgroup label="ELECTIONS RESULTS"></optgroup>
+	<optgroup label="-- PARLIAMENTARY">
+	<option value="3" selected="selected">NIDAA TOUNES</option>
+   	<option value="4">ENNAHDHA</option>
+   	<option value="5">UPL</option>
+	<option value="6">FRONT POPULAIRE</option>
+	<option value="7">CPR</option>
+	<option value="8">COURANT DEMOCRATIQUE</option>
+	<option value="9">COURANT DE L'AMOUR</option>
+	<option value="10">AL JOUMHOURI</option></optgroup>
+   	<optgroup label="-- PRESIDENTIAL 1ST ROUND">
+   	<option value="11">BEJI CAIED SEBSI</option>
+   	<option value="12">MOHAMED MARZOUKI</option>
+   	<option value="13">HAMMA HAMMAMI</option>
+   	<option value="14">SLIM RIAHI</option>
+   	<option value="15">HECHMI EL HAMDI</option></optgroup>
+   	<optgroup label="-- PRESIDENTIAL RUN-OFF">
+   	<option value="16">BEJI CAIED SEBSI</option>
+   	<option value="17">MOHAMED MARZOUKI</option></optgroup>
+	</select>
+   	
+   	<select  multiple size="5"  id="second_select" title='<b>ELECTORAL DATA</b></br>This menu displays electoral data for the three elections held in Tunisia in 2014, namely (the turnout, the valid ballots, the blank ballots and the cancelled ballots). To view more than one data from this dataset, CTRL-click (or command-click) each data.'>
+   	<optgroup label="ELECTORAL DATA"></optgroup>
+	<optgroup label="-- PARLIAMENTARY">
+   	<option value="18">TURNOUT</option>
+   	<option value="19">VALID BALLOTS</option>
+   	<option value="20">BLANK BALLOTS</option>
+   	<option value="21">CANCELLED BALLOTS</option>"></optgroup>
+   	<optgroup label="-- PRESIDENTIAL 1ST ROUND">
+   	<option value="22">TURNOUT</option>
+   	<option value="23">VALID BALLOTS</option>
+   	<option value="24">BLANK BALLOTS</option>
+   	<option value="25">CANCELLED BALLOTS</option></optgroup>
+   	<optgroup label="-- PRESIDENTIAL RUN-OFF">
+   	<option value="26">TURNOUT</option>
+   	<option value="27">VALID BALLOTS</option>
+   	<option value="28">BLANK BALLOTS</option>
+   	<option value="29">CANCELLED BALLOTS</option></optgroup>
+   	</select>
+
+   	<select  multiple size="5"  id="third_select" title='<b>SOCIO-ECONOMIC DATA</b></br>This menu displays data from the last nationwide survey that The National Institute of Statistics (INS) completed. Socio-economic and electoral data can be displayed simultaneously for the purpose of comparison and determining possible correlations. To view more than one data from this dataset, CTRL-click (or command-click) each data.'>
+   	<optgroup label="SOCIO-ECONOMIC DATA">
+	<option value="30">ILLETRACY RATIO</option>
+	<option value="31">YOUTH RATIO</option>
+   	<option value="32">UNEMPLOYMENT RATIO</option>
+   	<option value="33">UNEMPLOYMENT AMONG HIGHER EDUCATION</option>
+   	<option value="34">HIGHER EDUCATION RATIO</option>  	
+   	<option value="35">MOBILE COVERAGE</option>
+   	<option value="36">COMPUTER COVERAGE</option>
+   	<option value="37">INTERNET ACCESS</option>
+   	<option value="38">URBANIZATION RATIO</option>
+   	</optgroup>
+   	</select>
+   	
+   	<select id="chart_type" title='<b>Line vs. bar chart</b></br>  This menu allows the viewer to select either a line or bar chart to display the data. Note: a line graph here does not represent a series of related values, it is simply another option for visualizing data at a specific administrative level.'>
+   	<optgroup label="CHART TYPE">
+   		
+   		<option value=2>BAR CHART</option>
+      <option value=1>LINE CHART</option>
+   	">
+   	</select> 
+     
+      <select id="level" title='<b>Administrative or electoral level</b></br>The fifth menu has different options for different datasets. For elections data and results, one can view charts at the administrative district level (governorates) or the electoral district level (circonscriptions). There are 24 governorates in Tunisia and 27 circonscriptions (three governorates are divided into two as circonscriptions).'>
+      <optgroup label="SHOW LEVEL">
+         
+         <option value=2>ELECTORAL LEVEL</option>
+         <option value=1>ADMINISTRATIVE LEVEL</option>
+      ">
+      </select> 
+
+ 
+
+   	<div id="chart"></div> 
+     	
+</div> 
+
+<!-- end core -->
+
+
+
+
+<!-- footer -->
+
+<footer id="footer" class="clearfix" >
+  <div id="footer-inner" class="container">
+    <div class="row"> 
+      
+     A project exploring open data
+     <span class="footer-text float-right">
+      <a href="http://www.mourakiboun.org/"><img src="img/mourakiboun.png" alt="Mourakiboun" style="border:none" /></a>
+      <a href="http://www.democracyinternational.com"><img src="img/di.png" alt="Democracy International" style="border:none" /></a>
+     </span> 
+    
+    </div>
+  </div>
+</footer>
+
+<!-- end footer -->
+
+
+
+</body>
 </html>
