@@ -93,6 +93,8 @@ function formatData()
 	formatter.format(data, 20);
 	formatter.format(data, 21);
 	formatter.format(data, 22);
+	formatter.format(data, 23);
+	formatter.format(data, 24);
 	formatter.format(data, 25);
 	formatter.format(data, 26);
 	formatter.format(data, 27);
